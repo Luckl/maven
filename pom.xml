@@ -82,6 +82,7 @@ under the License.
     <module>maven-builder-support</module>
     <module>maven-model</module>
     <module>maven-model-builder</module>
+    <module>maven-slf4j-wrapper</module>
     <module>maven-core</module>
     <module>maven-settings</module>
     <module>maven-settings-builder</module>
@@ -515,6 +516,7 @@ under the License.
               <exclude>src/test/projects/**</exclude>
               <exclude>src/test/remote-repo/**</exclude>
               <exclude>**/*.odg</exclude>
+              <exclude>run_test.ps1</exclude>
               <!--
                 ! Excluded the license files itself cause they do not have have a license of themselfs.
               -->
@@ -597,6 +599,7 @@ under the License.
         <artifactId>apache-rat-plugin</artifactId>
         <configuration>
           <excludes combine.children="append">
+            <exclude>**/*.iml</exclude>
             <exclude>bootstrap/**</exclude>
             <exclude>README.bootstrap.txt</exclude>
             <exclude>README.md</exclude>

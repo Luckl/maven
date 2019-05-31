@@ -33,11 +33,13 @@ import org.apache.maven.execution.BuildSummary;
 import org.apache.maven.execution.ExecutionEvent;
 import org.apache.maven.execution.MavenExecutionResult;
 import org.apache.maven.execution.MavenSession;
+import org.apache.maven.logwrapper.MavenSlf4jWrapperFactory;
 import org.apache.maven.plugin.MojoExecution;
 import org.apache.maven.plugin.descriptor.MojoDescriptor;
 import org.apache.maven.project.MavenProject;
 import org.apache.maven.shared.utils.logging.MessageBuilder;
 import org.codehaus.plexus.util.StringUtils;
+import org.slf4j.ILoggerFactory;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -131,6 +133,13 @@ public class ExecutionEventLogger
             if ( event.getSession().getProjects().size() > 1 )
             {
                 logReactorSummary( event.getSession() );
+            }
+
+            ILoggerFactory iLoggerFactory = LoggerFactory.getILoggerFactory();
+            if (iLoggerFactory instanceof MavenSlf4jWrapperFactory) {
+                if (((MavenSlf4jWrapperFactory) iLoggerFactory).threwWarnings()) {
+                    event.getSession().getResult().addException(new Exception("There were warnings!"));
+                }
             }
 
             logResult( event.getSession() );

@@ -58,6 +58,7 @@ import org.apache.maven.execution.scope.internal.MojoExecutionScopeModule;
 import org.apache.maven.extension.internal.CoreExports;
 import org.apache.maven.extension.internal.CoreExtensionEntry;
 import org.apache.maven.lifecycle.LifecycleExecutionException;
+import org.apache.maven.logwrapper.MavenSlf4jWrapperFactory;
 import org.apache.maven.model.building.ModelProcessor;
 import org.apache.maven.project.MavenProject;
 import org.apache.maven.properties.internal.EnvironmentUtils;
@@ -433,7 +434,7 @@ public class MavenCli
     private CommandLine cliMerge( CommandLine mavenArgs, CommandLine mavenConfig )
     {
         CommandLine.Builder commandLineBuilder = new CommandLine.Builder();
-        
+
         // the args are easy, cli first then config file
         for ( String arg : mavenArgs.getArgs() )
         {
@@ -443,7 +444,7 @@ public class MavenCli
         {
             commandLineBuilder.addArg( arg );
         }
-        
+
         // now add all options, except for -D with cli first then config file
         List<Option> setPropertyOptions = new ArrayList<>();
         for ( Option opt : mavenArgs.getOptions() )
@@ -480,6 +481,9 @@ public class MavenCli
         cliRequest.showErrors = cliRequest.debug || cliRequest.commandLine.hasOption( CLIManager.ERRORS );
 
         slf4jLoggerFactory = LoggerFactory.getILoggerFactory();
+        if (slf4jLoggerFactory instanceof MavenSlf4jWrapperFactory) {
+            (())
+        }
         Slf4jConfiguration slf4jConfiguration = Slf4jConfigurationFactory.getConfiguration( slf4jLoggerFactory );
 
         if ( cliRequest.debug )
@@ -515,7 +519,7 @@ public class MavenCli
         {
             MessageUtils.setColorEnabled( false );
         }
-        
+
         // LOG STREAMS
         if ( cliRequest.commandLine.hasOption( CLIManager.LOG_FILE ) )
         {
@@ -1651,7 +1655,7 @@ public class MavenCli
         if ( commandLine.hasOption( CLIManager.SET_SYSTEM_PROPERTY ) )
         {
             String[] defStrs = commandLine.getOptionValues( CLIManager.SET_SYSTEM_PROPERTY );
-            
+
             if ( defStrs != null )
             {
                 for ( String defStr : defStrs )

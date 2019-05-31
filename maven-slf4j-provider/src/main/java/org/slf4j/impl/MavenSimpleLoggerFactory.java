@@ -19,14 +19,27 @@ package org.slf4j.impl;
  * under the License.
  */
 
+import org.apache.maven.logwrapper.MavenSlf4jWrapperFactory;
 import org.slf4j.Logger;
 
 /**
  * MavenSimpleLoggerFactory
  */
 public class MavenSimpleLoggerFactory
-    extends SimpleLoggerFactory
+    extends SimpleLoggerFactory implements MavenSlf4jWrapperFactory
 {
+    private boolean warningWasLogged = false;
+
+    @Override
+    public boolean threwWarnings(){
+        return warningWasLogged;
+    }
+
+    @Override
+    public void warningWasLogged() {
+        this.warningWasLogged = true;
+    }
+
     /**
      * Return an appropriate {@link MavenSimpleLogger} instance by name.
      */
@@ -39,7 +52,7 @@ public class MavenSimpleLoggerFactory
         }
         else
         {
-            Logger newInstance = new MavenSimpleLogger( name );
+            Logger newInstance = new MavenSimpleLogger( name, this );
             Logger oldInstance = loggerMap.putIfAbsent( name, newInstance );
             return oldInstance == null ? newInstance : oldInstance;
         }
