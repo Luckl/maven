@@ -26,8 +26,7 @@ import org.slf4j.event.Level;
 /**
  * MavenSimpleLoggerFactory
  */
-public class MavenSimpleLoggerFactory
-    extends SimpleLoggerFactory implements MavenSlf4jWrapperFactory
+public class MavenSimpleLoggerFactory extends SimpleLoggerFactory implements MavenSlf4jWrapperFactory
 {
     private boolean brokenOnLogLevel = false;
     private boolean shouldBreakOnLogLevel = false;
@@ -46,10 +45,10 @@ public class MavenSimpleLoggerFactory
     }
 
     @Override
-    public void breakOnLogsOfLevel(String logLevelTobreakOn)
+    public void breakOnLogsOfLevel( String logLevelTobreakOn )
     {
         shouldBreakOnLogLevel = true;
-        logLevel = Level.valueOf(logLevelTobreakOn);
+        logLevel = Level.valueOf( logLevelTobreakOn );
     }
 
     @Override
@@ -67,7 +66,7 @@ public class MavenSimpleLoggerFactory
     /**
      * Return an appropriate {@link MavenSimpleLogger} instance by name.
      */
-    public Logger getLogger(String name )
+    public Logger getLogger( String name )
     {
         Logger simpleLogger = loggerMap.get( name );
         if ( simpleLogger != null )

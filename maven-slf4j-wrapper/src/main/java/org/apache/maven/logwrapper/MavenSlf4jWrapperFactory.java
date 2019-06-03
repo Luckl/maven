@@ -31,7 +31,7 @@ public interface MavenSlf4jWrapperFactory extends ILoggerFactory
 
     void breakingLogOccured();
 
-    void breakOnLogsOfLevel(String logLevelTobreakOn);
+    void breakOnLogsOfLevel( String logLevelTobreakOn );
 
     boolean shouldBreakOnLogLevel();
 

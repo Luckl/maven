@@ -48,8 +48,7 @@ import org.slf4j.LoggerFactory;
  *
  * @author Benjamin Bentmann
  */
-public class ExecutionEventLogger
-    extends AbstractExecutionListener
+public class ExecutionEventLogger extends AbstractExecutionListener
 {
     private final Logger logger;
 
@@ -117,8 +116,8 @@ public class ExecutionEventLogger
             for ( MavenProject project : projects )
             {
                 int len = LINE_LENGTH - project.getName().length() - project.getPackaging().length() - 2;
-                logger.info( project.getName() + chars( ' ', ( len > 0 ) ? len : 1 ) + '[' + project.getPackaging()
-                    + ']' );
+                logger.info(
+                        project.getName() + chars( ' ', ( len > 0 ) ? len : 1 ) + '[' + project.getPackaging() + ']' );
             }
 
             totalProjects = projects.size();
@@ -137,11 +136,12 @@ public class ExecutionEventLogger
 
             ILoggerFactory iLoggerFactory = LoggerFactory.getILoggerFactory();
 
-            if (iLoggerFactory instanceof MavenSlf4jWrapperFactory)
+            if ( iLoggerFactory instanceof MavenSlf4jWrapperFactory )
             {
-                if (((MavenSlf4jWrapperFactory) iLoggerFactory).threwLogsOfBreakingLevel())
+                if ( ( (MavenSlf4jWrapperFactory) iLoggerFactory ).threwLogsOfBreakingLevel() )
                 {
-                    event.getSession().getResult().addException(new Exception("Build failed due to log statements above WARN. Fix the logged issues or remove flag --fail-level (-fl)"));
+                    event.getSession().getResult().addException( new Exception(
+                            "Build failed due to log statements above WARN. Fix the logged issues or remove flag --fail-level (-fl)" ) );
                 }
             }
 
@@ -310,16 +310,16 @@ public class ExecutionEventLogger
 
             // -------< groupId:artifactId >-------
             String projectKey = project.getGroupId() + ':' + project.getArtifactId();
-            
-            final String preHeader  = "--< ";
+
+            final String preHeader = "--< ";
             final String postHeader = " >--";
 
             final int headerLen = preHeader.length() + projectKey.length() + postHeader.length();
 
             String prefix = chars( '-', Math.max( 0, ( LINE_LENGTH - headerLen ) / 2 ) ) + preHeader;
 
-            String suffix = postHeader
-                + chars( '-', Math.max( 0, LINE_LENGTH - headerLen - prefix.length() + preHeader.length() ) );
+            String suffix = postHeader + chars( '-',
+                    Math.max( 0, LINE_LENGTH - headerLen - prefix.length() + preHeader.length() ) );
 
             logger.info( buffer().strong( prefix ).project( projectKey ).strong( suffix ).toString() );
 
@@ -357,8 +357,8 @@ public class ExecutionEventLogger
     {
         if ( logger.isWarnEnabled() )
         {
-            logger.warn( "Goal " + event.getMojoExecution().getGoal()
-                + " requires online mode for execution but Maven is currently offline, skipping" );
+            logger.warn(
+                    "Goal " + event.getMojoExecution().getGoal() + " requires online mode for execution but Maven is currently offline, skipping" );
         }
     }
 
@@ -382,9 +382,12 @@ public class ExecutionEventLogger
     }
 
     // CHECKSTYLE_OFF: LineLength
+
     /**
-     * <pre>&gt;&gt;&gt; mojo-artifactId:version:goal (mojo-executionId) &gt; :forked-goal @ project-artifactId &gt;&gt;&gt;</pre>
-     * <pre>&gt;&gt;&gt; mojo-artifactId:version:goal (mojo-executionId) &gt; [lifecycle]phase @ project-artifactId &gt;&gt;&gt;</pre>
+     * <pre>&gt;&gt;&gt; mojo-artifactId:version:goal (mojo-executionId) &gt; :forked-goal @ project-artifactId
+     * &gt;&gt;&gt;</pre>
+     * <pre>&gt;&gt;&gt; mojo-artifactId:version:goal (mojo-executionId) &gt; [lifecycle]phase @ project-artifactId
+     * &gt;&gt;&gt;</pre>
      */
     // CHECKSTYLE_ON: LineLength
     @Override
@@ -406,9 +409,12 @@ public class ExecutionEventLogger
     }
 
     // CHECKSTYLE_OFF: LineLength
+
     /**
-     * <pre>&lt;&lt;&lt; mojo-artifactId:version:goal (mojo-executionId) &lt; :forked-goal @ project-artifactId &lt;&lt;&lt;</pre>
-     * <pre>&lt;&lt;&lt; mojo-artifactId:version:goal (mojo-executionId) &lt; [lifecycle]phase @ project-artifactId &lt;&lt;&lt;</pre>
+     * <pre>&lt;&lt;&lt; mojo-artifactId:version:goal (mojo-executionId) &lt; :forked-goal @ project-artifactId
+     * &lt;&lt;&lt;</pre>
+     * <pre>&lt;&lt;&lt; mojo-artifactId:version:goal (mojo-executionId) &lt; [lifecycle]phase @ project-artifactId
+     * &lt;&lt;&lt;</pre>
      */
     // CHECKSTYLE_ON: LineLength
     @Override

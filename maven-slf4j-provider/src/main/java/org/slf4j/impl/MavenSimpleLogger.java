@@ -29,40 +29,40 @@ import static org.apache.maven.shared.utils.logging.MessageUtils.buffer;
 import java.io.PrintStream;
 
 /**
- * Logger for Maven, that support colorization of levels and stacktraces.
- * This class implements 2 methods introduced in slf4j-simple provider local copy.
+ * Logger for Maven, that support colorization of levels and stacktraces. This class implements 2 methods introduced in
+ * slf4j-simple provider local copy.
+ *
  * @since 3.5.0
  */
-public class MavenSimpleLogger
-    extends SimpleLogger
+public class MavenSimpleLogger extends SimpleLogger
 {
     private MavenSlf4jWrapperFactory factory;
 
     MavenSimpleLogger( String name )
     {
-        super(name);
+        super( name );
     }
 
     MavenSimpleLogger( String name, MavenSlf4jWrapperFactory factory )
     {
-        super(name);
+        super( name );
         this.factory = factory;
     }
 
     @Override
-    public void log(LoggingEvent event)
+    public void log( LoggingEvent event )
     {
-        super.warn(String.valueOf(factory.shouldBreakOnLogLevel()));
+        super.warn( String.valueOf( factory.shouldBreakOnLogLevel() ) );
         if ( factory.shouldBreakOnLogLevel() )
         {
-            super.info("comparing " + event.getLevel() + " to " + factory.getLevelToBreakOn() );
+            super.info( "comparing " + event.getLevel() + " to " + factory.getLevelToBreakOn() );
             if ( event.getLevel().compareTo( factory.getLevelToBreakOn() ) >= 0 )
             {
                 factory.breakingLogOccured();
             }
         }
 
-        super.log(event);
+        super.log( event );
     }
 
     @Override
@@ -71,16 +71,16 @@ public class MavenSimpleLogger
         switch ( level )
         {
             case LOG_LEVEL_TRACE:
-                return level().debug("TRACE").toString();
+                return level().debug( "TRACE" ).toString();
             case LOG_LEVEL_DEBUG:
-                return level().debug("DEBUG").toString();
+                return level().debug( "DEBUG" ).toString();
             case LOG_LEVEL_INFO:
-                return level().info("INFO").toString();
+                return level().info( "INFO" ).toString();
             case LOG_LEVEL_WARN:
-                return level().warning("WARNING").toString();
+                return level().warning( "WARNING" ).toString();
             case LOG_LEVEL_ERROR:
             default:
-                return level().error("ERROR").toString();
+                return level().error( "ERROR" ).toString();
         }
     }
 
@@ -91,11 +91,11 @@ public class MavenSimpleLogger
         {
             return;
         }
-        stream.print(buffer().failure(t.getClass().getName()));
+        stream.print( buffer().failure( t.getClass().getName() ) );
         if ( t.getMessage() != null )
         {
-            stream.print(": ");
-            stream.print(buffer().failure(t.getMessage()));
+            stream.print( ": " );
+            stream.print( buffer().failure( t.getMessage() ) );
         }
         stream.println();
 
@@ -103,21 +103,21 @@ public class MavenSimpleLogger
         {
             for ( StackTraceElement e : t.getStackTrace() )
             {
-                stream.print("    ");
-                stream.print(buffer().strong("at"));
-                stream.print(" " + e.getClassName() + "." + e.getMethodName());
-                stream.print(buffer().a(" (").strong(getLocation(e)).a(")"));
+                stream.print( "    " );
+                stream.print( buffer().strong( "at" ) );
+                stream.print( " " + e.getClassName() + "." + e.getMethodName() );
+                stream.print( buffer().a( " (" ).strong( getLocation( e ) ).a( ")" ) );
                 stream.println();
             }
 
             t = t.getCause();
             if ( t != null )
             {
-                stream.print(buffer().strong("Caused by").a(": ").a(t.getClass().getName()));
+                stream.print( buffer().strong( "Caused by" ).a( ": " ).a( t.getClass().getName() ) );
                 if ( t.getMessage() != null )
                 {
-                    stream.print(": ");
-                    stream.print(buffer().failure(t.getMessage()));
+                    stream.print( ": " );
+                    stream.print( buffer().failure( t.getMessage() ) );
                 }
                 stream.println();
             }
@@ -138,7 +138,7 @@ public class MavenSimpleLogger
         }
         else if ( e.getLineNumber() >= 0 )
         {
-            return String.format("%s:%s", e.getFileName(), e.getLineNumber());
+            return String.format( "%s:%s", e.getFileName(), e.getLineNumber() );
         }
         else
         {
