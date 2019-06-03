@@ -477,22 +477,7 @@ public class MavenCli
         cliRequest.quiet = !cliRequest.debug && cliRequest.commandLine.hasOption( CLIManager.QUIET );
         cliRequest.showErrors = cliRequest.debug || cliRequest.commandLine.hasOption( CLIManager.ERRORS );
 
-        boolean breakOnLogLevel = false;
-        String logLevelTobreakOn = null;
-        if ( cliRequest.commandLine.hasOption( CLIManager.FAIL_LEVEL ) )
-        {
-            breakOnLogLevel = true;
-            logLevelTobreakOn = cliRequest.commandLine.getOptionValue( CLIManager.FAIL_LEVEL );
-        }
-
-        slf4jLogger.error( "breaking " + breakOnLogLevel + " on log level of " + logLevelTobreakOn );
-
         slf4jLoggerFactory = LoggerFactory.getILoggerFactory();
-        if ( slf4jLoggerFactory instanceof MavenSlf4jWrapperFactory && breakOnLogLevel )
-        {
-            slf4jLogger.warn( "Enabling log level breaking" );
-            ( (MavenSlf4jWrapperFactory) slf4jLoggerFactory ).breakOnLogsOfLevel( logLevelTobreakOn );
-        }
 
         Slf4jConfiguration slf4jConfiguration = Slf4jConfigurationFactory.getConfiguration( slf4jLoggerFactory );
 
@@ -555,6 +540,20 @@ public class MavenCli
 
         plexusLoggerManager = new Slf4jLoggerManager();
         slf4jLogger = slf4jLoggerFactory.getLogger( this.getClass().getName() );
+
+        boolean breakOnLogLevel = false;
+        String logLevelToBreakOn = null;
+        if ( cliRequest.commandLine.hasOption( CLIManager.FAIL_LEVEL ) )
+        {
+            breakOnLogLevel = true;
+            logLevelToBreakOn = cliRequest.commandLine.getOptionValue( CLIManager.FAIL_LEVEL );
+        }
+
+        if ( slf4jLoggerFactory instanceof MavenSlf4jWrapperFactory && breakOnLogLevel )
+        {
+            slf4jLogger.warn( "Enabling log level breaking" );
+            ( (MavenSlf4jWrapperFactory) slf4jLoggerFactory ).breakOnLogsOfLevel( logLevelToBreakOn );
+        }
     }
 
     private void version( CliRequest cliRequest )
