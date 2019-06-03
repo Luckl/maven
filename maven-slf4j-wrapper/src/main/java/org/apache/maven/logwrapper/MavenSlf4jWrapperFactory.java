@@ -20,12 +20,20 @@ package org.apache.maven.logwrapper;
  */
 
 import org.slf4j.ILoggerFactory;
+import org.slf4j.event.Level;
 
 /**
  * Wrapper to implement warning checks
  */
 public interface MavenSlf4jWrapperFactory extends ILoggerFactory
 {
-    public boolean threwWarnings();
-    void warningWasLogged();
+    boolean threwLogsOfBreakingLevel();
+
+    void breakingLogOccured();
+
+    void breakOnLogsOfLevel(String logLevelTobreakOn);
+
+    boolean shouldBreakOnLogLevel();
+
+    Level getLevelToBreakOn();
 }

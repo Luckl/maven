@@ -480,10 +480,23 @@ public class MavenCli
         cliRequest.quiet = !cliRequest.debug && cliRequest.commandLine.hasOption( CLIManager.QUIET );
         cliRequest.showErrors = cliRequest.debug || cliRequest.commandLine.hasOption( CLIManager.ERRORS );
 
-        slf4jLoggerFactory = LoggerFactory.getILoggerFactory();
-        if (slf4jLoggerFactory instanceof MavenSlf4jWrapperFactory) {
-            (())
+        boolean breakOnLogLevel = false;
+        String logLevelTobreakOn = null;
+        if ( cliRequest.commandLine.hasOption( CLIManager.FAIL_LEVEL ) )
+        {
+            breakOnLogLevel = true;
+            logLevelTobreakOn = cliRequest.commandLine.getOptionValue( CLIManager.FAIL_LEVEL );
         }
+
+        slf4jLogger.error( "breaking " + breakOnLogLevel + " on log level of " + logLevelTobreakOn );
+
+        slf4jLoggerFactory = LoggerFactory.getILoggerFactory();
+        if ( slf4jLoggerFactory instanceof MavenSlf4jWrapperFactory && breakOnLogLevel )
+        {
+            slf4jLogger.warn("Enabling log level breaking");
+            ( ( MavenSlf4jWrapperFactory ) slf4jLoggerFactory ).breakOnLogsOfLevel(logLevelTobreakOn);
+        }
+
         Slf4jConfiguration slf4jConfiguration = Slf4jConfigurationFactory.getConfiguration( slf4jLoggerFactory );
 
         if ( cliRequest.debug )
@@ -1346,6 +1359,8 @@ public class MavenCli
 
         // this is the default behavior.
         String reactorFailureBehaviour = MavenExecutionRequest.REACTOR_FAIL_FAST;
+
+        slf4jLoggerFactory = LoggerFactory.getILoggerFactory();
 
         if ( commandLine.hasOption( CLIManager.NON_RECURSIVE ) )
         {

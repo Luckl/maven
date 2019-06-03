@@ -136,9 +136,12 @@ public class ExecutionEventLogger
             }
 
             ILoggerFactory iLoggerFactory = LoggerFactory.getILoggerFactory();
-            if (iLoggerFactory instanceof MavenSlf4jWrapperFactory) {
-                if (((MavenSlf4jWrapperFactory) iLoggerFactory).threwWarnings()) {
-                    event.getSession().getResult().addException(new Exception("There were warnings!"));
+
+            if (iLoggerFactory instanceof MavenSlf4jWrapperFactory)
+            {
+                if (((MavenSlf4jWrapperFactory) iLoggerFactory).threwLogsOfBreakingLevel())
+                {
+                    event.getSession().getResult().addException(new Exception("Build failed due to log statements above WARN. Fix the logged issues or remove flag --fail-level (-fl)"));
                 }
             }
 

@@ -20,8 +20,8 @@ package org.slf4j.impl;
  */
 
 import org.apache.maven.logwrapper.MavenSlf4jWrapperFactory;
-import org.slf4j.event.Level;
 import org.slf4j.event.LoggingEvent;
+import org.slf4j.event.SubstituteLoggingEvent;
 
 import static org.apache.maven.shared.utils.logging.MessageUtils.level;
 import static org.apache.maven.shared.utils.logging.MessageUtils.buffer;
@@ -50,10 +50,18 @@ public class MavenSimpleLogger
     }
 
     @Override
-    public void log(LoggingEvent event) {
-        if (event.getLevel().compareTo(Level.valueOf("CONFIGURATIONKEY")) >= 0) {
-            factory.warningWasLogged();
+    public void log(LoggingEvent event)
+    {
+        super.warn(String.valueOf(factory.shouldBreakOnLogLevel()));
+        if ( factory.shouldBreakOnLogLevel() )
+        {
+            super.info("comparing " + event.getLevel() + " to " + factory.getLevelToBreakOn() );
+            if ( event.getLevel().compareTo( factory.getLevelToBreakOn() ) >= 0 )
+            {
+                factory.breakingLogOccured();
+            }
         }
+
         super.log(event);
     }
 

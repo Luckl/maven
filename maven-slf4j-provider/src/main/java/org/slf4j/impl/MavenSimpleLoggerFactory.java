@@ -21,6 +21,7 @@ package org.slf4j.impl;
 
 import org.apache.maven.logwrapper.MavenSlf4jWrapperFactory;
 import org.slf4j.Logger;
+import org.slf4j.event.Level;
 
 /**
  * MavenSimpleLoggerFactory
@@ -28,22 +29,45 @@ import org.slf4j.Logger;
 public class MavenSimpleLoggerFactory
     extends SimpleLoggerFactory implements MavenSlf4jWrapperFactory
 {
-    private boolean warningWasLogged = false;
+    private boolean brokenOnLogLevel = false;
+    private boolean shouldBreakOnLogLevel = false;
+    private Level logLevel = null;
 
     @Override
-    public boolean threwWarnings(){
-        return warningWasLogged;
+    public boolean threwLogsOfBreakingLevel()
+    {
+        return brokenOnLogLevel;
     }
 
     @Override
-    public void warningWasLogged() {
-        this.warningWasLogged = true;
+    public void breakingLogOccured()
+    {
+        this.brokenOnLogLevel = true;
+    }
+
+    @Override
+    public void breakOnLogsOfLevel(String logLevelTobreakOn)
+    {
+        shouldBreakOnLogLevel = true;
+        logLevel = Level.valueOf(logLevelTobreakOn);
+    }
+
+    @Override
+    public boolean shouldBreakOnLogLevel()
+    {
+        return shouldBreakOnLogLevel;
+    }
+
+    @Override
+    public Level getLevelToBreakOn()
+    {
+        return logLevel;
     }
 
     /**
      * Return an appropriate {@link MavenSimpleLogger} instance by name.
      */
-    public Logger getLogger( String name )
+    public Logger getLogger(String name )
     {
         Logger simpleLogger = loggerMap.get( name );
         if ( simpleLogger != null )

@@ -224,6 +224,11 @@ under the License.
         <artifactId>maven-slf4j-provider</artifactId>
         <version>${project.version}</version>
       </dependency>
+      <dependency>
+        <groupId>org.apache.maven</groupId>
+        <artifactId>maven-slf4j-wrapper</artifactId>
+        <version>${project.version}</version>
+      </dependency>
       <!--bootstrap-end-comment-->
       <!--  Plexus -->
       <dependency>
@@ -516,7 +521,6 @@ under the License.
               <exclude>src/test/projects/**</exclude>
               <exclude>src/test/remote-repo/**</exclude>
               <exclude>**/*.odg</exclude>
-              <exclude>run_test.ps1</exclude>
               <!--
                 ! Excluded the license files itself cause they do not have have a license of themselfs.
               -->
