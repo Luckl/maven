@@ -49,20 +49,58 @@ public class MavenSimpleLogger extends SimpleLogger
         this.factory = factory;
     }
 
+    /**
+     * A simple implementation which always logs messages of level WARN
+     * according to the format outlined above.
+     */
     @Override
-    public void log( LoggingEvent event )
-    {
-        super.warn( String.valueOf( factory.shouldBreakOnLogLevel() ) );
-        if ( factory.shouldBreakOnLogLevel() )
-        {
-            super.info( "comparing " + event.getLevel() + " to " + factory.getLevelToBreakOn() );
-            if ( event.getLevel().compareTo( factory.getLevelToBreakOn() ) >= 0 )
-            {
-                factory.breakingLogOccured();
-            }
-        }
+    public void warn( String msg ) {
+        super.warn( msg );
+        recordWarn();
+    }
 
-        super.log( event );
+    /**
+     * Perform single parameter substitution before logging the message of level
+     * WARN according to the format outlined above.
+     */
+    @Override
+    public void warn( String format, Object arg ) {
+        super.warn( format, arg );
+        recordWarn();
+    }
+
+    /**
+     * Perform double parameter substitution before logging the message of level
+     * WARN according to the format outlined above.
+     */
+    @Override
+    public void warn( String format, Object arg1, Object arg2 ) {
+        super.warn( format, arg1, arg2 );
+        recordWarn();
+    }
+
+    /**
+     * Perform double parameter substitution before logging the message of level
+     * WARN according to the format outlined above.
+     */
+    @Override
+    public void warn( String format, Object... argArray ) {
+        super.warn( format, argArray );
+        recordWarn();
+    }
+
+    /** Log a message of level WARN, including an exception. */
+    @Override
+    public void warn( String msg, Throwable t ) {
+        super.warn( msg, t );
+        recordWarn();
+    }
+
+    private void recordWarn() {
+        if ( !factory.threwLogsOfBreakingLevel() ) {
+            factory.breakingLogOccured();
+            super.info( "Breaking log occurred" );
+        }
     }
 
     @Override
