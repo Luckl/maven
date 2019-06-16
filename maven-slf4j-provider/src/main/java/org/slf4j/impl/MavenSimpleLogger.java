@@ -20,8 +20,6 @@ package org.slf4j.impl;
  */
 
 import org.apache.maven.logwrapper.MavenSlf4jWrapperFactory;
-import org.slf4j.event.LoggingEvent;
-import org.slf4j.event.SubstituteLoggingEvent;
 
 import static org.apache.maven.shared.utils.logging.MessageUtils.level;
 import static org.apache.maven.shared.utils.logging.MessageUtils.buffer;
@@ -98,7 +96,7 @@ public class MavenSimpleLogger extends SimpleLogger
 
     private void recordWarn() {
         if ( !factory.threwLogsOfBreakingLevel() ) {
-            factory.breakingLogOccured();
+            factory.breakingLogOccurred();
             super.info( "Breaking log occurred" );
         }
     }

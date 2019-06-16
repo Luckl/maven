@@ -39,16 +39,16 @@ public class MavenSimpleLoggerFactory extends SimpleLoggerFactory implements Mav
     }
 
     @Override
-    public void breakingLogOccured()
+    public void breakingLogOccurred()
     {
         this.brokenOnLogLevel = true;
     }
 
     @Override
-    public void breakOnLogsOfLevel( String logLevelTobreakOn )
+    public void breakOnLogsOfLevel( String logLevelToBreakOn )
     {
         shouldBreakOnLogLevel = true;
-        logLevel = Level.valueOf( logLevelTobreakOn );
+        logLevel = Level.valueOf( logLevelToBreakOn );
     }
 
     @Override
