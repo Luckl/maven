@@ -1,4 +1,4 @@
-package org.apache.maven.logwrapper;
+package org.slf4j.impl;
 
 /*
  * Licensed to the Apache Software Foundation (ASF) under one
@@ -19,14 +19,31 @@ package org.apache.maven.logwrapper;
  * under the License.
  */
 
-import org.slf4j.ILoggerFactory;
+import org.slf4j.event.Level;
 
 /**
- * Wrapper for creating loggers which can have a log level threshold.
+ * Responsible for keeping state of whether the threshold of the --fail-level flag has been hit.
  */
-public interface MavenSlf4jWrapperFactory extends ILoggerFactory
+class MavenFailLevelLoggerState
 {
-    boolean threwLogsOfBreakingLevel();
+    private final Level logThreshold;
+    private boolean thresholdHit = false;
 
-    void breakOnLogsOfLevel( String logLevelToBreakOn );
+    MavenFailLevelLoggerState( Level logLevel )
+    {
+        assert logLevel != null;
+        this.logThreshold = logLevel;
+    }
+
+    void recordLogLevel( Level logLevel ) {
+        if ( !thresholdHit && logLevel.toInt() >= logThreshold.toInt() )
+        {
+            thresholdHit = true;
+        }
+    }
+
+    boolean threwLogsOfBreakingLevel()
+    {
+        return thresholdHit;
+    }
 }

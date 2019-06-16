@@ -24,48 +24,44 @@ import org.slf4j.Logger;
 import org.slf4j.event.Level;
 
 /**
- * MavenSimpleLoggerFactory
+ *
  */
-public class MavenSimpleLoggerFactory extends SimpleLoggerFactory implements MavenSlf4jWrapperFactory
+public class MavenLoggerFactory extends SimpleLoggerFactory implements MavenSlf4jWrapperFactory
 {
-    private boolean brokenOnLogLevel = false;
-    private boolean shouldBreakOnLogLevel = false;
-    private Level logLevel = null;
-
-    @Override
-    public boolean threwLogsOfBreakingLevel()
-    {
-        return brokenOnLogLevel;
-    }
-
-    @Override
-    public void breakingLogOccurred()
-    {
-        this.brokenOnLogLevel = true;
-    }
+    private MavenFailLevelLoggerState failLevelLoggerState = null;
 
     @Override
     public void breakOnLogsOfLevel( String logLevelToBreakOn )
     {
-        shouldBreakOnLogLevel = true;
-        logLevel = Level.valueOf( logLevelToBreakOn );
+        if ( failLevelLoggerState != null )
+        {
+            throw new IllegalStateException( "Maven logger fail level has already been set." );
+        }
+
+        Level level = Level.valueOf( logLevelToBreakOn );
+        if ( level.toInt() < Level.WARN.toInt() )
+        {
+            throw new IllegalArgumentException( "Logging level thresholds can only be set to WARN or ERROR" );
+        }
+
+        failLevelLoggerState = new MavenFailLevelLoggerState( level );
     }
 
     @Override
-    public boolean shouldBreakOnLogLevel()
+    public boolean threwLogsOfBreakingLevel()
     {
-        return shouldBreakOnLogLevel;
-    }
+        if ( failLevelLoggerState != null )
+        {
+            return failLevelLoggerState.threwLogsOfBreakingLevel();
+        }
 
-    @Override
-    public Level getLevelToBreakOn()
-    {
-        return logLevel;
+        return false;
     }
 
     /**
      * Return an appropriate {@link MavenSimpleLogger} instance by name.
      */
+    @Override
     public Logger getLogger( String name )
     {
         Logger simpleLogger = loggerMap.get( name );
@@ -75,9 +71,22 @@ public class MavenSimpleLoggerFactory extends SimpleLoggerFactory implements Mav
         }
         else
         {
-            Logger newInstance = new MavenSimpleLogger( name, this );
+
+            Logger newInstance = getNewLoggingInstance( name );
             Logger oldInstance = loggerMap.putIfAbsent( name, newInstance );
             return oldInstance == null ? newInstance : oldInstance;
+        }
+    }
+
+    private Logger getNewLoggingInstance( String name )
+    {
+        if ( failLevelLoggerState == null )
+        {
+            return new MavenSimpleLogger( name );
+        }
+        else
+        {
+            return new MavenFailLevelLogger( name, failLevelLoggerState );
         }
     }
 }

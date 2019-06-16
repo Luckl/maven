@@ -19,12 +19,10 @@ package org.slf4j.impl;
  * under the License.
  */
 
-import org.apache.maven.logwrapper.MavenSlf4jWrapperFactory;
-
-import static org.apache.maven.shared.utils.logging.MessageUtils.level;
-import static org.apache.maven.shared.utils.logging.MessageUtils.buffer;
-
 import java.io.PrintStream;
+
+import static org.apache.maven.shared.utils.logging.MessageUtils.buffer;
+import static org.apache.maven.shared.utils.logging.MessageUtils.level;
 
 /**
  * Logger for Maven, that support colorization of levels and stacktraces. This class implements 2 methods introduced in
@@ -34,71 +32,9 @@ import java.io.PrintStream;
  */
 public class MavenSimpleLogger extends SimpleLogger
 {
-    private MavenSlf4jWrapperFactory factory;
-
     MavenSimpleLogger( String name )
     {
         super( name );
-    }
-
-    MavenSimpleLogger( String name, MavenSlf4jWrapperFactory factory )
-    {
-        super( name );
-        this.factory = factory;
-    }
-
-    /**
-     * A simple implementation which always logs messages of level WARN
-     * according to the format outlined above.
-     */
-    @Override
-    public void warn( String msg ) {
-        super.warn( msg );
-        recordWarn();
-    }
-
-    /**
-     * Perform single parameter substitution before logging the message of level
-     * WARN according to the format outlined above.
-     */
-    @Override
-    public void warn( String format, Object arg ) {
-        super.warn( format, arg );
-        recordWarn();
-    }
-
-    /**
-     * Perform double parameter substitution before logging the message of level
-     * WARN according to the format outlined above.
-     */
-    @Override
-    public void warn( String format, Object arg1, Object arg2 ) {
-        super.warn( format, arg1, arg2 );
-        recordWarn();
-    }
-
-    /**
-     * Perform double parameter substitution before logging the message of level
-     * WARN according to the format outlined above.
-     */
-    @Override
-    public void warn( String format, Object... argArray ) {
-        super.warn( format, argArray );
-        recordWarn();
-    }
-
-    /** Log a message of level WARN, including an exception. */
-    @Override
-    public void warn( String msg, Throwable t ) {
-        super.warn( msg, t );
-        recordWarn();
-    }
-
-    private void recordWarn() {
-        if ( !factory.threwLogsOfBreakingLevel() ) {
-            factory.breakingLogOccurred();
-            super.info( "Breaking log occurred" );
-        }
     }
 
     @Override
