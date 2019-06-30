@@ -141,7 +141,8 @@ public class ExecutionEventLogger extends AbstractExecutionListener
                 if ( ( (MavenSlf4jWrapperFactory) iLoggerFactory ).threwLogsOfBreakingLevel() )
                 {
                     event.getSession().getResult().addException( new Exception(
-                            "Build failed due to log statements above WARN. Fix the logged issues or remove flag --fail-level (-fl)" ) );
+                            "Build failed due to log statements above WARN. "
+                                    + "Fix the logged issues or remove flag --fail-level (-fl)" ) );
                 }
             }
 
@@ -357,8 +358,9 @@ public class ExecutionEventLogger extends AbstractExecutionListener
     {
         if ( logger.isWarnEnabled() )
         {
+            String goal = event.getMojoExecution().getGoal();
             logger.warn(
-                    "Goal " + event.getMojoExecution().getGoal() + " requires online mode for execution but Maven is currently offline, skipping" );
+                    "Goal " + goal + " requires online mode for execution but Maven is currently offline, skipping" );
         }
     }
 

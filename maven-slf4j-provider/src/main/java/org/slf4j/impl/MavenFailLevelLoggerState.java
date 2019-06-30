@@ -35,7 +35,8 @@ class MavenFailLevelLoggerState
         this.logThreshold = logLevel;
     }
 
-    void recordLogLevel( Level logLevel ) {
+    void recordLogLevel( Level logLevel )
+    {
         if ( !thresholdHit && logLevel.toInt() >= logThreshold.toInt() )
         {
             thresholdHit = true;

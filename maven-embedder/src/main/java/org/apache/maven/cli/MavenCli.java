@@ -507,7 +507,8 @@ public class MavenCli
         else if ( !"auto".equals( styleColor ) )
         {
             throw new IllegalArgumentException(
-                    "Invalid color configuration option [" + styleColor + "]. Supported values are (auto|always|never)." );
+                    "Invalid color configuration option [" + styleColor + "]. "
+                            + "Supported values are (auto|always|never)." );
         }
         else if ( cliRequest.commandLine.hasOption( CLIManager.BATCH_MODE ) || cliRequest.commandLine.hasOption(
                 CLIManager.LOG_FILE ) )
@@ -696,7 +697,9 @@ public class MavenCli
         return container;
     }
 
-    private List<CoreExtensionEntry> loadCoreExtensions( CliRequest cliRequest, ClassRealm containerRealm, Set<String> providedArtifacts )
+    private List<CoreExtensionEntry> loadCoreExtensions( CliRequest cliRequest,
+                                                         ClassRealm containerRealm,
+                                                         Set<String> providedArtifacts )
     {
         if ( cliRequest.multiModuleProjectDirectory == null )
         {
@@ -780,7 +783,8 @@ public class MavenCli
         return Collections.emptyList();
     }
 
-    private List<CoreExtension> readCoreExtensionsDescriptor( File extensionsFile ) throws IOException, XmlPullParserException
+    private List<CoreExtension> readCoreExtensionsDescriptor( File extensionsFile )
+            throws IOException, XmlPullParserException
     {
         CoreExtensionsXpp3Reader parser = new CoreExtensionsXpp3Reader();
 
@@ -792,7 +796,10 @@ public class MavenCli
 
     }
 
-    private ClassRealm setupContainerRealm( ClassWorld classWorld, ClassRealm coreRealm, List<File> extClassPath, List<CoreExtensionEntry> extensions ) throws Exception
+    private ClassRealm setupContainerRealm( ClassWorld classWorld,
+                                            ClassRealm coreRealm,
+                                            List<File> extClassPath,
+                                            List<CoreExtensionEntry> extensions ) throws Exception
     {
         if ( !extClassPath.isEmpty() || !extensions.isEmpty() )
         {
@@ -999,7 +1006,8 @@ public class MavenCli
             {
                 slf4jLogger.error( "" );
                 slf4jLogger.error(
-                        "For more information about the errors and possible solutions" + ", please read the following articles:" );
+                        "For more information about the errors and possible solutions, "
+                                + "please read the following articles:" );
 
                 for ( Map.Entry<String, String> entry : references.entrySet() )
                 {
@@ -1062,7 +1070,10 @@ public class MavenCli
         return ":" + failedProject.getArtifactId();
     }
 
-    private void logSummary( ExceptionSummary summary, Map<String, String> references, String indent, boolean showErrors )
+    private void logSummary( ExceptionSummary summary,
+                             Map<String, String> references,
+                             String indent,
+                             boolean showErrors )
     {
         String referenceKey = "";
 
@@ -1114,7 +1125,8 @@ public class MavenCli
             // effective line, with indent and reset if end is colored
             line = indent + line + ( "".equals( nextColor ) ? "" : ANSI_RESET );
 
-            if ( ( i == lines.length - 1 ) && ( showErrors || ( summary.getException() instanceof InternalErrorException ) ) )
+            if ( ( i == lines.length - 1 )
+                   && ( showErrors || ( summary.getException() instanceof InternalErrorException ) ) )
             {
                 slf4jLogger.error( line, summary.getException() );
             }
@@ -1312,7 +1324,8 @@ public class MavenCli
             if ( commandLine.hasOption( deprecatedOption ) )
             {
                 slf4jLogger.warn(
-                        "Command line option -" + deprecatedOption + " is deprecated and will be removed in future Maven versions." );
+                        "Command line option -" + deprecatedOption + " is deprecated "
+                                + "and will be removed in future Maven versions." );
             }
         }
 
