@@ -24,7 +24,7 @@ import org.slf4j.Logger;
 import org.slf4j.event.Level;
 
 /**
- *
+ * LogFactory for Maven which can create a simple logger or a one which, if set, fails the build on a threshold.
  */
 public class MavenLoggerFactory extends SimpleLoggerFactory implements MavenSlf4jWrapperFactory
 {
@@ -71,7 +71,6 @@ public class MavenLoggerFactory extends SimpleLoggerFactory implements MavenSlf4
         }
         else
         {
-
             Logger newInstance = getNewLoggingInstance( name );
             Logger oldInstance = loggerMap.putIfAbsent( name, newInstance );
             return oldInstance == null ? newInstance : oldInstance;
